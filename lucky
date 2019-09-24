@@ -1,0 +1,6 @@
+parameters="$@"
+query_string=$(echo -ne ${parameters} | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g')
+
+video_relative_url=$(curl -s "https://www.youtube.com/results?search_query=$query_string" | grep -e "href=\"/watch?v=" | head -1 | sed -E 's/(.*href=")(.*)/\2/' | cut -f1 -d'"')
+
+open "https://www.youtube.com$video_relative_url"
